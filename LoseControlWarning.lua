@@ -37,7 +37,7 @@ LoseControlWarning:SetScript('OnEvent', function(self, event, ...)
 	self[event](self, ...)
 end)
 
-LoseControlWarning:RegisterUnitEvent('PLAYER_ENTERING_WORLD')
+LoseControlWarning:RegisterEvent('PLAYER_ENTERING_WORLD')
 LoseControlWarning:RegisterEvent("GROUP_ROSTER_UPDATE")
 LoseControlWarning:RegisterEvent("GROUP_JOINED")
 
@@ -70,18 +70,9 @@ end)
 function LoseControlWarning:PLAYER_ENTERING_WORLD()
 	local inInstance, instanceType = IsInInstance()
 	local GrSize = GetNumGroupMembers()
-	if GrSize <= 5 and instanceType ~= "pvp" or instanceType ~= "raid" then
+	if GrSize <= 5 and (instanceType ~= "pvp" or instanceType ~= "raid") then
 		LoseControlWarning:RegisterUnitEvent('UNIT_AURA', "player")
 		LoseControlWarning:UpdateFrames("player")
-	else
-		UnregisterEvent("UNIT_AURA")
-	end
-end
-
-function LoseControlWarning:GROUP_ROSTER_UPDATE()
-	local inInstance, instanceType = IsInInstance()
-	local GrSize = GetNumGroupMembers()
-	if GrSize <= 5 and instanceType ~= "pvp" or instanceType ~= "raid" then
 		for i = 1, GetNumGroupMembers() do
 			local unitId = "party"..i
 			if UnitExists(unitId) then
@@ -90,7 +81,26 @@ function LoseControlWarning:GROUP_ROSTER_UPDATE()
 			end
 		end
 	else
-		UnregisterEvent("UNIT_AURA")
+		LoseControlWarning:UnregisterEvent("UNIT_AURA")
+	end
+end
+
+function LoseControlWarning:GROUP_ROSTER_UPDATE()
+	local inInstance, instanceType = IsInInstance()
+	local GrSize = GetNumGroupMembers()
+	print(GrSize)
+	if GrSize <= 5 and (instanceType ~= "pvp" or instanceType ~= "raid") then
+		LoseControlWarning:RegisterUnitEvent('UNIT_AURA', "player")
+		LoseControlWarning:UpdateFrames("player")
+		for i = 1, GetNumGroupMembers() do
+			local unitId = "party"..i
+			if UnitExists(unitId) then
+				LoseControlWarning:RegisterUnitEvent('UNIT_AURA', unitId)
+				LoseControlWarning:UpdateFrames(unitId)
+			end
+		end
+	else
+		LoseControlWarning:UnregisterEvent("UNIT_AURA")
 	end
 end
 
@@ -220,8 +230,9 @@ function LoseControlWarning:UpdateFrames(unitId)
 					relativePoint = "BOTTOMRIGHT"
 					Point = "BOTTOMRIGHT"
 		 		elseif strmatch(unitId, "party") then
-					local id = strmatch(unit, '%d')
-					LoseControlparty, PartyAnchor = "LoseControlparty"..id, "PartyAnchor"..id
+					local id = strmatch(unitId, '%d')
+					LoseControlparty, PartyAnchor = _G["LoseControlparty"..id], _G["PartyAnchor"..id]
+					print(LoseControlparty)
 					if LoseControlparty:IsShown() then
 						relativeFrame = LoseControlparty
 						relativePoint = "BOTTOMLEFT"
