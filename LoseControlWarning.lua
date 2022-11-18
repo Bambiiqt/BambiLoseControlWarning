@@ -88,7 +88,6 @@ end
 function LoseControlWarning:GROUP_ROSTER_UPDATE()
 	local inInstance, instanceType = IsInInstance()
 	local GrSize = GetNumGroupMembers()
-	print(GrSize)
 	if GrSize <= 5 and (instanceType ~= "pvp" or instanceType ~= "raid") then
 		LoseControlWarning:RegisterUnitEvent('UNIT_AURA', "player")
 		LoseControlWarning:UpdateFrames("player")
@@ -232,7 +231,6 @@ function LoseControlWarning:UpdateFrames(unitId)
 		 		elseif strmatch(unitId, "party") then
 					local id = strmatch(unitId, '%d')
 					LoseControlparty, PartyAnchor = _G["LoseControlparty"..id], _G["PartyAnchor"..id]
-					print(LoseControlparty)
 					if LoseControlparty:IsShown() then
 						relativeFrame = LoseControlparty
 						relativePoint = "BOTTOMLEFT"
