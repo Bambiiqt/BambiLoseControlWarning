@@ -34,7 +34,7 @@ LoseControlWarning:SetScript('OnEvent', function(self, event, arg1, arg2)
 	if event == 'PLAYER_ENTERING_WORLD' then LoseControlWarning:PLAYER_ENTERING_WORLD()
 	elseif event == 'GROUP_ROSTER_UPDATE' then LoseControlWarning:GROUP_ROSTER_UPDATE()
 	elseif event == 'GROUP_JOINED' then LoseControlWarning:GROUP_ROSTER_UPDATE()
-	elseif event == "UNIT_AURA" then self:UNIT_AURA(arg1)
+	elseif event == "UNIT_AURA" then LoseControlWarning:UNIT_AURA(arg1)
 	end
 end)
 
