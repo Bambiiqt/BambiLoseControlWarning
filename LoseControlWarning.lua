@@ -5,6 +5,7 @@ local hieght = 30
 local width = 30
 
 local spellIds = {
+		["Unstable Affliction"] = "True",
 		[233490] = "True", -- UA
 		[233497] = "True", -- UA
 		[233496] = "True", -- UA
@@ -185,7 +186,7 @@ function LoseControlWarning:UNIT_AURA(unitId)
 		if not scf[unitId] then scf[unitId] = {} end
 		for i = 1, 40 do
 			local name, icon, count, _, duration, expirationTime, _, _, _, spellId = UnitAura(unitId, i,  "HARMFUL")
-			if spellIds[spellId] then
+			if spellIds[spellId] or spellIds[name] then
 				if not scf[unitId][j] then 
 					LoseControlWarning:CreateFrame(unitId, j)
 				end
