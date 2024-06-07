@@ -5,7 +5,7 @@ local hieght = 30
 local width = 30
 
 local spellIds = {
-		["Unstable Affliction"] = "True",
+		--["Unstable Affliction"] = "True",
 		[233490] = "True", -- UA
 		[233497] = "True", -- UA
 		[233496] = "True", -- UA
