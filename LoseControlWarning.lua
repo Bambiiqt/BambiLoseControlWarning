@@ -29,6 +29,18 @@ local spellIds = {
 		[34914] = "True", -- VT
 }
 
+local UnitAura = UnitAura
+if UnitAura == nil then
+  --- Deprecated in 10.2.5
+  UnitAura = function(unitToken, index, filter)
+		local aura = C_UnitAuras.GetAuraDataByIndex(unitToken, index, filter)
+		if not aura then
+			return nil;
+		end
+
+		return aura.name, aura.icon, aura.applications, aura.dispelName, aura.duration, aura.expirationTime, aura.sourceUnit, aura.isStealable, nil, aura.spellId
+	end
+end
 
 local LoseControlWarning = CreateFrame('Frame')
 LoseControlWarning:SetScript('OnEvent', function(self, event, arg1, arg2)
@@ -186,6 +198,7 @@ function LoseControlWarning:UNIT_AURA(unitId)
 		if not scf[unitId] then scf[unitId] = {} end
 		for i = 1, 40 do
 			local name, icon, count, _, duration, expirationTime, _, _, _, spellId = UnitAura(unitId, i,  "HARMFUL")
+			if not name then break end
 			if spellIds[spellId] or spellIds[name] then
 				if not scf[unitId][j] then 
 					LoseControlWarning:CreateFrame(unitId, j)
